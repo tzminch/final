@@ -42,25 +42,34 @@ if __name__== "__main__":
     resultLIST = resultDICT["result_segmentation"]
     refLIST = resultLIST.split("/")
     
-    score = 0
+    posScore = 0
+    negScore = 0
     posSTR = ""
     negSTR = ""
-    for i in refLIST:
+    for i in range(len(refLIST)):
         for j in posLIST:
-            if i == j:
-                score += 1
-                print("positive", i)
-                posSTR = posSTR + i + " "
+            if refLIST[i] == j:
+                if j == "很多":
+                    print(refLIST[i], refLIST[i+1])
+                    posSTR = posSTR + refLIST[i] + refLIST[i+1] + " "
+                else:
+                    posScore += 1
+                    print("positive", refLIST[i])
+                    posSTR = posSTR + refLIST[i] + " "
         for k in negLIST:
-            if i == k:
-                score -= 1
-                print("negative", i)
-                negSTR = negSTR + i + " "
+            if refLIST[i] == k:
+                if k == "沒有":
+                    print(refLIST[i], refLIST[i+1])
+                    negSTR = negSTR + refLIST[i] + refLIST[i+1] + " "
+                else:
+                    negScore += 1
+                    print("negative", refLIST[i])
+                    negSTR = negSTR + refLIST[i] + " "
     
     allSTR = posSTR + negSTR
-    print("此門課分數為：", score)
+    print("此門課分數為：", posScore // negScore)
     
-    if score > 0:
+    if posScore // negScore > 1:
         print("正面")
     else:
         print("負面")
